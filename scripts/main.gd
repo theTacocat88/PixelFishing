@@ -1,11 +1,13 @@
 extends Node2D
 
+# NOTE: Selector for throwing rod
 @onready var catch_selector: Sprite2D = $Catch/CatchSelector
 var selector_dir = 0
 var move_selector = false
 var selector_speed = 1000
 var catch_val
 
+# NOTE: Type of throw
 enum CatchValue { TERRIBLE, BAD, DECENT, GOOD }
 
 func _ready() -> void:
@@ -17,7 +19,8 @@ func _process(delta: float) -> void:
 		check_selector_pos()
 	if move_selector:
 		move_select(delta)
-	
+
+# NOTE: Move selector
 func move_select(delta: float):
 	if selector_dir == 0:
 		catch_selector.position.x += selector_speed * delta
@@ -28,6 +31,7 @@ func move_select(delta: float):
 		if catch_selector.position.x <= 570:
 			selector_dir = 0
 
+# NOTE: Get the type of catch
 func check_selector_pos():
 	if catch_selector.position.x >= 1285 or catch_selector.position.x <= 633.8:
 		catch_val = CatchValue.TERRIBLE
