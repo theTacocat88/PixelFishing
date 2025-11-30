@@ -7,9 +7,6 @@
 [node name="Game" type="Node2D"]
 script = ExtResource("1_lnu2h")
 
-[node name="Node2D" type="Node2D" parent="."]
-position = Vector2(905.805, 1023.007)
-
 [node name="Catch" type="Node" parent="."]
 
 [node name="CatchBar" type="Sprite2D" parent="Catch"]
@@ -18,4 +15,9 @@ texture = ExtResource("1_uwrxv")
 
 [node name="CatchSelector" type="Sprite2D" parent="Catch"]
 position = Vector2(960, 1021.1)
+texture = ExtResource("2_yqjtg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(969, 441)
 texture = ExtResource("2_yqjtg")

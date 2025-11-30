@@ -1,0 +1,86 @@
+{
+	"common": [
+		{
+			"name": "Bluegill",
+			"minWeight": 0.25,
+			"maxWeight": 4.8,
+			"cost": 10
+		},
+		{
+			"name": "Yellow Perch",
+			"minWeight": 0.5,
+			"maxWeight": 4.3,
+			"cost": 15
+		}
+	],
+	"uncommon": [
+		{
+			"name": "Black Crappie",
+			"minWeight": 0.75,
+			"maxWeight": 5.5,
+			"cost": 50
+		},
+		{
+			"name": "White Crappie",
+			"minWeight": 0.75,
+			"maxWeight": 5.2,
+			"cost": 55
+		}
+	],
+	"rare": [
+		{
+			"name": "Walleye",
+			"minWeight": 2.0,
+			"maxWeight": 25.0,
+			"cost": 200
+		},
+		{
+			"name": "Northern Pike",
+			"minWeight": 5.0,
+			"maxWeight": 55.0,
+			"cost": 250
+		}
+	],
+	"legendary": [
+		{
+			"name": "Muskellunge",
+			"minWeight": 10.0,
+			"maxWeight": 67.5,
+			"cost": 1000
+		},
+		{
+			"nmae": "Chinook Salmon",
+			"minWeight": 15.0,
+			"maxWeight": 97.4,
+			"cost": 1200
+		}
+	],
+	"mythical": [
+		{
+			"name": "Alligator Gar",
+			"minWeight": 50.0,
+			"maxWeight": 279.0,
+			"cost": 5000
+		},
+		{
+			"name": "Wels Catfish",
+			"minWeight": 40.0,
+			"maxWeight": 297.0,
+			"cost": 5500
+		}
+	],
+	"exotic": [
+		{
+			"name": "Atlantic Bluefin Tuna",
+			"minWeight": 200.0,
+			"maxWeight": 1496.0,
+			"cost": 20000
+		},
+		{
+			"name": "Black Marlin",
+			"minWeight": 300.0,
+			"maxWeight": 1560.0,
+			"cost": 25000
+		}
+	]
+}
