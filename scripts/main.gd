@@ -1,5 +1,8 @@
 extends Node2D
 
+# NOTE: Save data
+var save_data: Dictionary = {}
+
 # NOTE: Selector for throwing rod
 @onready var catch_selector: Sprite2D = $Catch/CatchSelector
 var selector_dir = 0
@@ -19,6 +22,16 @@ func _process(delta: float) -> void:
 		check_selector_pos()
 	if move_selector:
 		move_select(delta)
+
+# NOTE: Saving Functionality
+func save():
+	var filepath: String = "user://pfsave.json"
+	var file = FileAccess.open(filepath, FileAccess.WRITE)
+	if file == null:
+		print("Save failed -> user://")
+	var json_str = JSON.stringify(save_data)
+	file.store_string(json_str)
+	file.close()
 
 # NOTE: Move selector
 func move_select(delta: float):
