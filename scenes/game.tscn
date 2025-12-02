@@ -21,3 +21,13 @@ texture = ExtResource("2_yqjtg")
 visible = false
 position = Vector2(969, 441)
 texture = ExtResource("2_yqjtg")
+
+[node name="TempFishLabel" type="Label" parent="."]
+offset_left = 620.0
+offset_top = 216.0
+offset_right = 1286.0454
+offset_bottom = 519.49585
+theme_override_font_sizes/font_size = 36
+text = "FishLabel"
+horizontal_alignment = 1
+vertical_alignment = 1
