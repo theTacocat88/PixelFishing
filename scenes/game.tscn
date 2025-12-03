@@ -17,11 +17,6 @@ texture = ExtResource("1_uwrxv")
 position = Vector2(960, 1021.1)
 texture = ExtResource("2_yqjtg")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(969, 441)
-texture = ExtResource("2_yqjtg")
-
 [node name="TempFishLabel" type="Label" parent="."]
 offset_left = 620.0
 offset_top = 216.0

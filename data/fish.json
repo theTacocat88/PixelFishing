@@ -49,7 +49,7 @@
 			"cost": 1000
 		},
 		{
-			"nmae": "Chinook Salmon",
+			"name": "Chinook Salmon",
 			"minWeight": 15.0,
 			"maxWeight": 97.4,
 			"cost": 1200

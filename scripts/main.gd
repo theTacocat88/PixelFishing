@@ -2,39 +2,45 @@ extends Node2D
 
 var rng = RandomNumberGenerator.new()
 
-#TEMPORARY
+# TEMPORARY OBJECT
 @onready var tempfishlabel: Label = $TempFishLabel
 
-# NOTE: Save data
+# Save data
 var save_data: Dictionary = {}
+# Chances rarities get picked
 var WEIGHT_VALUES: Dictionary = { \
-		"COMMON": 150, 
-		"UNCOMMON": 90, 
+		"COMMON": 125, 
+		"UNCOMMON": 100, 
 		"RARE": 50, 
-		"LEGENDARY": 10, 
-		"MYTHICAL": 4, 
-		"EXOTIC": 1 
+		"LEGENDARY": 20, 
+		"MYTHICAL": 10, 
+		"EXOTIC": 5 
 	}
 
-# NOTE: Selector for throwing rod
+# Selector for throwing the rod
 @onready var catch_selector: Sprite2D = $Catch/CatchSelector
 var selector_dir = 0
 var move_selector = false
 var selector_speed = 1000
 var catch_val
+
+# Other variables
 var weight_total
 
-# NOTE: Type of throw
+# Type of throw
 enum CatchValue { TERRIBLE, BAD, DECENT, GOOD }
 
 func _ready() -> void:
+	# Init rng and other variables
 	rng.randomize()
 	move_selector = true
 
 func _process(delta: float) -> void:
+	# Check if rod is thrown
 	if Input.is_action_just_pressed("LeftClick"):
 		move_selector = false
 		check_selector_pos()
+	# Check if you can move the selector
 	if move_selector:
 		move_select(delta)
 
@@ -48,6 +54,7 @@ func save():
 	file.store_string(json_str)
 	file.close()
 
+# Load the fish JSON file
 func load_fish() -> Dictionary:
 	var filepath: String = "res://data/fish.json"
 	var file = FileAccess.open(filepath, FileAccess.READ)
@@ -55,18 +62,18 @@ func load_fish() -> Dictionary:
 	var fish_list = JSON.parse_string(json_str)
 	return fish_list
 
-# NOTE: Move selector
+# Move the selector
 func move_select(delta: float):
-	if selector_dir == 0:
+	if selector_dir == 0: # 0 = right
 		catch_selector.position.x += selector_speed * delta
 		if catch_selector.position.x >= 1350:
 			selector_dir = 1
-	elif selector_dir == 1:
+	elif selector_dir == 1: # 1 = left
 		catch_selector.position.x -= selector_speed * delta
 		if catch_selector.position.x <= 570:
 			selector_dir = 0
 
-# NOTE: Get the type of catch
+# Get the type of catch
 func check_selector_pos():
 	var fish_rarity = []
 	if catch_selector.position.x >= 1285 or catch_selector.position.x <= 633.8:
@@ -93,8 +100,11 @@ func check_selector_pos():
 		weight_total = WEIGHT_VALUES["COMMON"] + WEIGHT_VALUES["UNCOMMON"]
 	catch(fish_rarity)
 
+# Finish the catch
 func catch(possible_rarity: Array):
+	# Get the fish JSON
 	var fish: Dictionary = load_fish()
+	# Weighted selection of fish based on type of throw
 	var weighted = rng.randi_range(0, weight_total)
 	var selected_rarity = null
 	for rarity in possible_rarity:
@@ -102,10 +112,21 @@ func catch(possible_rarity: Array):
 		if weighted <= 0:
 			selected_rarity = rarity
 			break
+	# The selected fish
 	var fish_obj: Dictionary = \
-		fish[selected_rarity.to_lower()][rng.randi_range(0, fish[selected_rarity.to_lower()].size() - 1)]
+		fish[selected_rarity.to_lower()]\
+			[rng.randi_range(0, fish[selected_rarity.to_lower()].size() - 1)]
 	var fish_name = fish_obj["name"]
 	var fish_weight = rng.randf_range(fish_obj["minWeight"], fish_obj["maxWeight"])
 	var fish_value = fish_obj["cost"]
+	# Formatting
 	fish_weight = snapped(fish_weight, 0.01)
-	tempfishlabel.text = fish_name + "\nWeight (lb): " + str(fish_weight) + "\nValue: " + str(fish_value)
+	# Show the fish
+	tempfishlabel.text = fish_name + "\nWeight (lb): " + str(fish_weight) \
+		+ "\nValue: " + str(fish_value)
+	
+	# Wait
+	await get_tree().create_timer(1.0).timeout
+	
+	# Start moving the selector again
+	move_selector = true
