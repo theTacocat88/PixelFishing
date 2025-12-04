@@ -2,9 +2,6 @@ extends Node2D
 
 var rng = RandomNumberGenerator.new()
 
-# TEMPORARY OBJECT
-@onready var tempfishlabel: Label = $TempFishLabel
-
 # Save data
 var save_data: Dictionary = {}
 # Chances rarities get picked
@@ -19,6 +16,9 @@ var WEIGHT_VALUES: Dictionary = { \
 
 # Selector for throwing the rod
 @onready var catch_selector: Sprite2D = $Catch/CatchSelector
+@onready var catch_bar_sprite: Sprite2D = $Catch/CatchBar
+@onready var finishing_bar: Sprite2D = $Catch/FinishingBar
+@onready var finishing_selector: Sprite2D = $Catch/FinishingSelector
 var selector_dir = 0
 var move_selector = false
 var selector_speed = 1000
@@ -34,6 +34,7 @@ func _ready() -> void:
 	# Init rng and other variables
 	rng.randomize()
 	move_selector = true
+	finishing_bar.z_index = -1
 
 func _process(delta: float) -> void:
 	# Check if rod is thrown
@@ -102,8 +103,6 @@ func check_selector_pos():
 
 # Finish the catch
 func catch(possible_rarity: Array):
-	# Get the fish JSON
-	var fish: Dictionary = load_fish()
 	# Weighted selection of fish based on type of throw
 	var weighted = rng.randi_range(0, weight_total)
 	var selected_rarity = null
@@ -112,21 +111,58 @@ func catch(possible_rarity: Array):
 		if weighted <= 0:
 			selected_rarity = rarity
 			break
+	
+	catch_bar()
+	
+	select_catch(selected_rarity)
+
+func select_catch(rarity):
+	var fish: Dictionary = load_fish()
 	# The selected fish
 	var fish_obj: Dictionary = \
-		fish[selected_rarity.to_lower()]\
-			[rng.randi_range(0, fish[selected_rarity.to_lower()].size() - 1)]
+		fish[rarity.to_lower()]\
+			[rng.randi_range(0, fish[rarity.to_lower()].size() - 1)]
 	var fish_name = fish_obj["name"]
 	var fish_weight = rng.randf_range(fish_obj["minWeight"], fish_obj["maxWeight"])
 	var fish_value = fish_obj["cost"]
 	# Formatting
 	fish_weight = snapped(fish_weight, 0.01)
 	# Show the fish
-	tempfishlabel.text = fish_name + "\nWeight (lb): " + str(fish_weight) \
-		+ "\nValue: " + str(fish_value)
-	
-	# Wait
-	await get_tree().create_timer(1.0).timeout
-	
-	# Start moving the selector again
-	move_selector = true
+	print(fish_name + "\nWeight (lb): " + str(fish_weight) \
+		+ "\nValue: " + str(fish_value))
+
+func catch_bar():
+	# Change to the catching bar
+	match catch_val:
+		CatchValue.TERRIBLE:
+			var texture: Texture2D = load("res://assets/catching/reeling/terrible/" + \
+				str(rng.randi_range(1, 7)) + ".png")
+			finishing_bar.texture = texture
+			catch_bar_sprite.visible = false
+			catch_selector.visible = false
+			finishing_bar.visible = true
+			finishing_selector.visible = true
+		CatchValue.BAD:
+			var texture: Texture2D = load("res://assets/catching/reeling/bad/" + \
+				str(rng.randi_range(1, 4)) + ".png")
+			finishing_bar.texture = texture
+			catch_bar_sprite.visible = false
+			catch_selector.visible = false
+			finishing_bar.visible = true
+			finishing_selector.visible = true
+		CatchValue.DECENT:
+			var texture: Texture2D = load("res://assets/catching/reeling/decent/" + \
+				str(rng.randi_range(1, 3)) + ".png")
+			finishing_bar.texture = texture
+			catch_bar_sprite.visible = false
+			catch_selector.visible = false
+			finishing_bar.visible = true
+			finishing_selector.visible = true
+		CatchValue.GOOD:
+			var texture: Texture2D = load("res://assets/catching/reeling/good/" + \
+				str(rng.randi_range(1, 2)) + ".png")
+			finishing_bar.texture = texture
+			catch_bar_sprite.visible = false
+			catch_selector.visible = false
+			finishing_bar.visible = true
+			finishing_selector.visible = true

@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://44fqsvp6b4o2"]
+[gd_scene load_steps=5 format=3 uid="uid://44fqsvp6b4o2"]
 
 [ext_resource type="Script" uid="uid://b5ivrrwru6ubh" path="res://scripts/main.gd" id="1_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://crdk1vyyn3x3u" path="res://assets/catch-bar.png" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://beu54m06mvmc0" path="res://assets/catch-selector.png" id="2_yqjtg"]
+[ext_resource type="Texture2D" uid="uid://cd7b0fpf2tj5f" path="res://assets/catching/catch-selector.png" id="4_lbhrr"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_lnu2h")
@@ -17,12 +18,11 @@ texture = ExtResource("1_uwrxv")
 position = Vector2(960, 1021.1)
 texture = ExtResource("2_yqjtg")
 
-[node name="TempFishLabel" type="Label" parent="."]
-offset_left = 620.0
-offset_top = 216.0
-offset_right = 1286.0454
-offset_bottom = 519.49585
-theme_override_font_sizes/font_size = 36
-text = "FishLabel"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="FinishingBar" type="Sprite2D" parent="Catch"]
+position = Vector2(1855, 540)
+rotation = 1.5707964
+
+[node name="FinishingSelector" type="Sprite2D" parent="Catch"]
+visible = false
+position = Vector2(1855, 540)
+texture = ExtResource("4_lbhrr")
