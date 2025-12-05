@@ -1,5 +1,9 @@
 extends Node2D
 
+# Signals
+signal finish_catch
+
+# RNG
 var rng = RandomNumberGenerator.new()
 
 # Save data
@@ -20,12 +24,18 @@ var WEIGHT_VALUES: Dictionary = { \
 @onready var finishing_bar: Sprite2D = $Catch/FinishingBar
 @onready var finishing_selector: Sprite2D = $Catch/FinishingSelector
 var selector_dir = 0
+var catch_selector_dir = 0
 var move_selector = false
+var move_finishing_selector = false
 var selector_speed = 1000
 var catch_val
+var selecting = true
+var finishing = false
+var catch_successful
 
 # Other variables
 var weight_total
+var finishing_multiplier = 1.2
 
 # Type of throw
 enum CatchValue { TERRIBLE, BAD, DECENT, GOOD }
@@ -34,16 +44,28 @@ func _ready() -> void:
 	# Init rng and other variables
 	rng.randomize()
 	move_selector = true
+	move_finishing_selector = false
+	finishing = false
 	finishing_bar.z_index = -1
+	finishing_bar.visible = false
+	finishing_selector.visible = false
 
 func _process(delta: float) -> void:
 	# Check if rod is thrown
-	if Input.is_action_just_pressed("LeftClick"):
+	if Input.is_action_just_pressed("LeftClick") and selecting:
 		move_selector = false
 		check_selector_pos()
+	
+	if Input.is_action_just_pressed("LeftClick") and finishing:
+		move_finishing_selector = false
+		check_color()
+	
 	# Check if you can move the selector
 	if move_selector:
 		move_select(delta)
+	
+	if move_finishing_selector:
+		catch_bar(delta)
 
 # NOTE: Saving Functionality
 func save():
@@ -112,9 +134,20 @@ func catch(possible_rarity: Array):
 			selected_rarity = rarity
 			break
 	
-	catch_bar()
+	throw_bar()
 	
-	select_catch(selected_rarity)
+	selecting = false
+	
+	await get_tree().create_timer(0.000001).timeout
+	
+	finishing = true
+	
+	move_finishing_selector = true
+	
+	await finish_catch
+	
+	if catch_successful:
+		select_catch(selected_rarity)
 
 func select_catch(rarity):
 	var fish: Dictionary = load_fish()
@@ -131,7 +164,7 @@ func select_catch(rarity):
 	print(fish_name + "\nWeight (lb): " + str(fish_weight) \
 		+ "\nValue: " + str(fish_value))
 
-func catch_bar():
+func throw_bar():
 	# Change to the catching bar
 	match catch_val:
 		CatchValue.TERRIBLE:
@@ -166,3 +199,26 @@ func catch_bar():
 			catch_selector.visible = false
 			finishing_bar.visible = true
 			finishing_selector.visible = true
+
+func catch_bar(delta: float):
+	if catch_selector_dir == 0: # 0 = up
+		finishing_selector.position.y -= (selector_speed * finishing_multiplier) * delta
+		if finishing_selector.position.y <= 146:
+			catch_selector_dir = 1
+	elif catch_selector_dir == 1: # 1 = down
+		finishing_selector.position.y += (selector_speed * finishing_multiplier) * delta
+		if finishing_selector.position.y >= 934:
+			catch_selector_dir = 0
+
+func check_color():
+	# Getting color
+	var viewport: Viewport = get_viewport()
+	var viewport_texture: ViewportTexture = viewport.get_texture()
+	var viewport_image: Image = viewport_texture.get_image()
+	var color_at_selector: Color = viewport_image.\
+		get_pixel(int(finishing_selector.position.x), int(finishing_selector.position.y))
+	
+	catch_successful = true
+	finish_catch.emit()
+	catch_successful = false
+	finish_catch.emit()

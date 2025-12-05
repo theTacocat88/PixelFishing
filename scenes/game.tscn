@@ -19,6 +19,7 @@ position = Vector2(960, 1021.1)
 texture = ExtResource("2_yqjtg")
 
 [node name="FinishingBar" type="Sprite2D" parent="Catch"]
+visible = false
 position = Vector2(1855, 540)
 rotation = 1.5707964
 
