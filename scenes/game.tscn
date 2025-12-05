@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://44fqsvp6b4o2"]
+[gd_scene load_steps=6 format=3 uid="uid://44fqsvp6b4o2"]
 
 [ext_resource type="Script" uid="uid://b5ivrrwru6ubh" path="res://scripts/main.gd" id="1_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://crdk1vyyn3x3u" path="res://assets/catch-bar.png" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://di8geq5niydg8" path="res://scripts/save_management.gd" id="2_iywne"]
 [ext_resource type="Texture2D" uid="uid://beu54m06mvmc0" path="res://assets/catch-selector.png" id="2_yqjtg"]
 [ext_resource type="Texture2D" uid="uid://cd7b0fpf2tj5f" path="res://assets/catching/catch-selector.png" id="4_lbhrr"]
 
@@ -9,6 +10,7 @@
 script = ExtResource("1_lnu2h")
 
 [node name="Catch" type="Node" parent="."]
+script = ExtResource("2_iywne")
 
 [node name="CatchBar" type="Sprite2D" parent="Catch"]
 position = Vector2(960, 1021.11)
